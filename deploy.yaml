@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      project: web
+  template:
+    metadata:
+      labels:
+        project: web
+    spec:
+      containers:
+        - name: project-site
+          image: rohit19aug/dashboard:1.0
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: project-entrypoint
+  namespace: default
+spec:
+  type: NodePort
+  selector:
+    project: web
+  ports:
+    - port: 5000
+      targetPort: 5000
+      nodePort: 30020
